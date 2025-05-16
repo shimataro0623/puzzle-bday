@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Puzzle 4 - Guess the song</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background-image: url('d75d2b54-72f0-4e7b-8cd1-b3c56c2cf791.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      color: #fff;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #a0cfff;
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: float 4s infinite ease-in-out;
+      filter: drop-shadow(0 0 3px #a0cfff);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    .puzzle-container {
+      background: rgba(27, 36, 52, 0.85);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      width: 600px;
+      z-index: 2;
+      user-select: none;
+      color: #a0cfff;
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px #6ab8ff;
+      color: #a0d8ff;
+    }
+
+    .quote {
+      font-style: italic;
+      font-size: 1.2rem;
+      margin: 15px 0 25px 0;
+      color: #d0e8ff;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid #3a98ff;
+      margin-bottom: 10px;
+      width: 100%;
+      background: #10233f;
+      color: #a0cfff;
+      outline: none;
+      box-shadow: 0 0 8px #3a98ff inset;
+      transition: border-color 0.3s ease;
+    }
+    input::placeholder {
+      color: #6699cc;
+    }
+    input:focus {
+      border-color: #88bbff;
+      box-shadow: 0 0 12px #88bbff inset;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 1rem;
+      border: none;
+      background-color: #3a98ff;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #3a98ff;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #67b2ff;
+      box-shadow: 0 0 16px #67b2ff;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: #ff6b6b;
+      font-size: 0.9rem;
+      min-height: 24px;
+    }
+
+    .celebration-message {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      color: #a0d8ff;
+      display: none;
+      user-select: none;
+    }
+
+    #nextBtn {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="puzzle-container">
+    <h2>GUESS THE SONG:</h2>
+    <p><small>This is a cipher. Find the logic behind this and guess the song.</small></p>
+    <div class="quote">
+      "Kv'u dggp c nqpi fca ykvjcpw, oa htkpgf<br/>
+      Cpf Kn'n vgnn aqw cnn cdqwv kv yjgp K ugg aqw cickp<br/>
+      Yg'xg eqog c nqpi yca htqo yjgtg yg dgica<br/>
+      Qj, Kn'n vgnn aqw cnn cdqwv kv yjgp K ugg aqw cickp<br/>
+      Yjgp K ugg aqw cickp"
+    </div>
+    <p>
+      Clue 1: This artist has 35 million monthly listeners on Spotify. He has collabed with some of the greatest artists including Jung Kook, Selena Gomez, and others.<br/>
+      Clue 2: C = A , G = E , V = T, R = P , follow this trend...
+    </p>
+
+    <input type="text" id="answerInput" placeholder="Enter the name of the song" autocomplete="off" />
+    <br /><br />
+    <button onclick="checkAnswer()">Submit</button>
+    <div class="error" id="error"></div>
+
+    <div id="celebration" class="celebration-message">
+      Amazing! This has been wonderful! 🎉
+    </div>
+
+    <!-- Correctly placed Next button -->
+    <button id="nextBtn" onclick="goToNext()">Next Puzzle</button>
+
+    <!-- Hidden audio -->
+    <audio id="audioPlayer" src="see_you_again.mp3"></audio>
+  </div>
+
+  <!-- Floating sparkles -->
+  <script>
+    for (let i = 0; i < 50; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.top = Math.random() * 100 + 'vh';
+      sparkle.style.animationDuration = (3 + Math.random() * 3) + 's';
+      document.body.appendChild(sparkle);
+    }
+  </script>
+
+  <!-- Fireworks -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    function launchFireworks() {
+      const duration = 4000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 40, spread: 120, ticks: 80, zIndex: 1000 };
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          return;
+        }
+
+        const particleCount = 60 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, {
+          particleCount,
+          origin: { x: 0.5 + randomInRange(-0.15, 0.15), y: 0.8 }
+        }));
+      }, 250);
+    }
+
+    function goToNext() {
+      window.location.href = "puzzle4.html";
+    }
+
+    function checkAnswer() {
+      const answer = document.getElementById("answerInput").value.trim().toLowerCase();
+      const correct = "see you again";
+      const error = document.getElementById("error");
+      const celebrationDiv = document.getElementById("celebration");
+      const audio = document.getElementById("audioPlayer");
+      const nextBtn = document.getElementById("nextBtn");
+
+      if (answer === correct) {
+        error.textContent = "";
+        celebrationDiv.style.display = "block";
+        nextBtn.style.display = "inline-block";
+        launchFireworks();
+        audio.play();
+      } else {
+        celebrationDiv.style.display = "none";
+        error.textContent = "Nope! Try again.";
+        nextBtn.style.display = "none";
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }
+    function goToNext() {
+      window.location.href = "happybirthday.html";
+    }
+  </script>
+</body>
+</html>
