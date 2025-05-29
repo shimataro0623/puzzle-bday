@@ -707,7 +707,7 @@
         </div>
       </div>
       <!-- Countdown -->
-       <h2>THE WORLD HAS BEEN BLESSED WITH AN ANGEL FOR-</h2>
+       <h2>A QUIET REMINDER OF WHERE IT ALL BEGAN-</h2>
       <div class="timer-box" id="timer-box">
         <div class="timer-segment"><div class="timer-value" id="months">0</div><div class="timer-label">Months</div></div>
         <div class="timer-segment"><div class="timer-value" id="days">0</div><div class="timer-label">Days</div></div>
@@ -719,7 +719,7 @@
       <div class="greeting-frame">
         <div class="greeting-text" id="greeting-text">
 HAPPY BIRTHDAAYYY ARYA!
-YOU TURNED 19?! YAAR THANK YOU SO MUCH FOR EVERYTHING. YOU ARE ONE OF THE SWEETEST,PRETTY,LOVELY AND THE MOST GENUINE PERSON I HAVE EVER MEET. AISE HI DOSTI HAMESHA RAHE ZINDAGI BHAR. I HOPE YOU GET EVERYTHING YOU WANT AND ARE ALWAYS HAPPY. BOHUT YAAD AATI HAI YAAR UN DINO KI JAB SAB SATH HO TE THE. AAJA KABHI HYD, MILENGE KABHI AUR WE WILL GOSSIP FOR HOURS LOL. TOUCH ME REHENA AUR HAMESHA AISE HI JOLLY REHNA. HAAAAAPPPYYY VALA BIRTHDAYYYY!
+YOU TURNED 19?! YAAR THANK YOU SO MUCH FOR EVERYTHING. YOU ARE ONE OF THE SWEETEST,LOVELY AND ONE OF THE MOST GENUINE PERSON I HAVE EVER MEET. AISE HI DOSTI HAMESHA RAHE ZINDAGI BHAR. I HOPE YOU GET EVERYTHING YOU WANT AND ARE ALWAYS HAPPY. BOHUT YAAD AATI HAI YAAR UN DINO KI JAB SAB SATH HO TE THE. AAJA KABHI HYD, MILENGE KABHI AUR WE WILL GOSSIP FOR HOURS LOL. TOUCH ME REHENA AUR HAMESHA AISE HI JOLLY REHNA. HAAAAAPPPYYY VALA BIRTHDAYYYY!
         </div>
         <div class="mosaic-container">
           <img src="Arya.jpg" alt="Mosaic" id="mosaic-img"/>
@@ -801,6 +801,7 @@ YOU TURNED 19?! YAAR THANK YOU SO MUCH FOR EVERYTHING. YOU ARE ONE OF THE SWEETE
         setTimeout(() => {
           envelopeOuter.style.display = "none";
           mainCard.classList.add("visible");
+          document.getElementById('navigateBtn').style.display = 'block';
           cakeArea.style.cursor = "pointer";
           cakeArea.addEventListener("click", cutCake, { once: true });
           music.play();
@@ -869,7 +870,36 @@ YOU TURNED 19?! YAAR THANK YOU SO MUCH FOR EVERYTHING. YOU ARE ONE OF THE SWEETE
         card.appendChild(sp);
         setTimeout(()=>sp.remove(), 1200);
       }
-    }
+    }document.getElementById('navigateBtn').onclick = function() {
+  window.location.href = 'puzzzle1.html';
+};
+
   </script>
+  <!-- ... rest of your HTML ... -->
+<button id="navigateBtn" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 28px;font-size:1.1em;background-color:#007bff;color:#fff;border:none;border-radius:6px;cursor:pointer;z-index:9999;">
+  Click here to proceed.
+</button>
+<script>
+  // Sparkles on cake cut
+  function sparkles() {
+    const card = document.getElementById("main-card");
+    for(let i=0; i<8; i++) {
+      const sp = document.createElement("div");
+      sp.className = "sparkle";
+      sp.textContent = "✨";
+      sp.style.left = (36 + Math.random()*28) + "%";
+      sp.style.top = (18 + Math.random()*10) + "%";
+      card.appendChild(sp);
+      setTimeout(()=>sp.remove(), 1200);
+    }
+  }
+  document.getElementById('navigateBtn').onclick = function() {
+    window.location.href = 'puzzzle1.html';
+  };
+</script>
+</body>
+</html>
+
+
 </body>
 </html>
