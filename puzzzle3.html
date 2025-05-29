@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puzzle 3</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: transparent;
+      background-image: url('background2.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: cover;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #00eaff;
+      text-shadow: 0 0 10px #00eaff;
+    }
+
+    .clue {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 3px;
+      color: #ffffff;
+      font-weight: bold;
+      text-shadow: 0 0 5px #00eaff;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #00cfff;
+      border-radius: 10px;
+      background: #001b33;
+      color: #a0eaff;
+      outline: none;
+      box-shadow: 0 0 8px #00cfff inset;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+
+    input[type="date"]:focus {
+      border-color: #00eaff;
+      box-shadow: 0 0 12px #00eaff inset;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background-color: #00c2ff;
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00e1ff;
+    }
+
+    .error {
+      margin-top: 1rem;
+      color: #ff8080;
+      font-weight: bold;
+    }
+
+    .celebration-message {
+      display: none;
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Puzzle 3</h1>
+    <div class="clue">TIG HRI</div>
+    <input id="dateInput" type="date" />
+    <button onclick="validateAnswer()">Submit</button>
+    <div id="error" class="error"></div>
+    <div id="celebration" class="celebration-message">
+      Correct! 🎉<br />
+      <button onclick="goToNext()">Click here to continue</button>
+    </div>
+  </div>
+
+  <canvas id="fireworksCanvas"></canvas>
+
+  <script>
+    function validateAnswer() {
+      const input = document.getElementById('dateInput').value;
+      const errorDiv = document.getElementById('error');
+      const celebrationDiv = document.getElementById('celebration');
+
+      if (!input) {
+        errorDiv.textContent = "Please select a date!";
+        return;
+      }
+
+      const dateObj = new Date(input);
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const year = String(dateObj.getFullYear()).slice(-2);
+      const formatted = `${day}/${month}/${year}`;
+      const correctAnswer = "09/04/22";
+
+      if (formatted === correctAnswer) {
+        errorDiv.textContent = '';
+        celebrationDiv.style.display = 'block';
+        launchFireworks();
+      } else {
+        celebrationDiv.style.display = 'none';
+        errorDiv.textContent = 'Incorrect! Try Again. Clue : OJHIUPVU.';
+      }
+    }
+
+    function goToNext() {
+      window.location.href = 'countdown.html';
+    }
+
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function createParticle(x, y) {
+      const angle = Math.random() * 2 * Math.PI;
+      const speed = Math.random() * 5 + 2;
+      return {
+        x,
+        y,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        radius: Math.random() * 2 + 1,
+        life: 100,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`
+      };
+    }
+
+    function launchFireworks() {
+      for (let i = 0; i < 100; i++) {
+        particles.push(createParticle(canvas.width / 2, canvas.height / 2));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.dx;
+        p.y += p.dy;
+        p.dy += 0.05;
+        p.life -= 1;
+        if (p.life <= 0) particles.splice(i, 1);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
